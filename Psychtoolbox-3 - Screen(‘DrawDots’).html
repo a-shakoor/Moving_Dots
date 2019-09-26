@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://psychtoolbox.org/docs/Screen-DrawDots -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Psychtoolbox-3 - Screen(‘DrawDots’)</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="./Psychtoolbox-3 - Screen(‘DrawDots’)_files/styles.css">
+<link rel="stylesheet" href="./Psychtoolbox-3 - Screen(‘DrawDots’)_files/doxy.css">
+<link rel="stylesheet" href="./Psychtoolbox-3 - Screen(‘DrawDots’)_files/pygment_trac.css">
+<link rel="alternate" title="PTB News" type="application/atom+xml" href="http://psychtoolbox.org/docs/%7B" site.baseurl="" }}="" news.atom="">
+<link rel="icon" type="image/x-icon" href="http://psychtoolbox.org/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./Psychtoolbox-3 - Screen(‘DrawDots’)_files/prettify.css"></head>
+
+<body><div class="wrapper">
+
+<aside>
+  <h1><a href="http://psychtoolbox.org/">Psychtoolbox-3</a></h1>
+
+  <p>Psychophysics Toolbox Version 3 (PTB-3) is a free set of <a href="http://www.mathworks.com/">Matlab</a> and 
+  <a href="http://www.octave.org/">GNU Octave</a> functions for vision and neuroscience research. It makes it easy to synthesize
+  and show accurately controlled visual and auditory stimuli and interact with the observer.</p> 
+
+  <nav>
+  <ul>
+    <li><small>Getting started</small>
+    <ul>
+      <li><a href="http://psychtoolbox.org/overview.html">Overview</a></li>
+      <li><a href="http://psychtoolbox.org/versions.html">Versions</a></li>
+      <li><a href="http://psychtoolbox.org/requirements.html">System Requirements</a></li>
+      <li><a href="http://psychtoolbox.org/download.html">Download</a></li>
+    </ul>
+    </li>
+  </ul>
+  <ul>
+    <li><small>Getting help</small>
+    <ul>
+      <li><a href="http://peterscarfe.com/ptbtutorials.html">Tutorial</a></li>
+      <li><a href="http://psychtoolbox.org/docs/Psychtoolbox.html">Function Reference</a></li>
+      <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki/FAQ">FAQ</a></li>
+      <li><a href="http://psychtoolbox.org/forum.html">Forum</a></li>
+    </ul>
+  </li>
+  </ul>
+  <ul>
+    <li><small>Diving in</small>
+    <ul>
+      <li><a href="http://psychtoolbox.org/contribute">Contribute to the project</a></li>
+      <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3/wiki">Wiki</a></li>
+      <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3/issues">Bugs &amp; Feature requests</a></li>
+      <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3">Git repository</a></li>
+    </ul>
+    </li>
+  </ul>
+  </nav>
+
+  <ul class="buttons">
+    <li><a href="https://groups.yahoo.com/neo/groups/psychtoolbox/conversations/topics">Support <strong>Forum</strong></a></li>
+    <li><a href="https://raw.github.com/Psychtoolbox-3/Psychtoolbox-3/master/Psychtoolbox/DownloadPsychtoolbox.m">Automatic <strong>Installer</strong></a></li>
+    <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3/zipball/master">Download PTB<strong>ZIP File</strong></a></li>
+    <li><a href="https://github.com/Psychtoolbox-3/Psychtoolbox-3">View On <strong>GitHub</strong></a></li>
+  </ul>
+</aside>
+
+<section id="content">
+
+<article>
+<header>
+  <h2>Screen(‘DrawDots’)</h2>
+</header>
+
+
+<h5 id="psychtoolboxscreenmex-subfunction"><a href="http://psychtoolbox.org/docs/Psychtoolbox">Psychtoolbox</a>&gt;<a href="http://psychtoolbox.org/docs/Screen">Screen</a>.{mex*} subfunction</h5>
+
+<p>Quickly draw an array of dots.  “xy” is a two-row vector containing the x and y<br>
+coordinates of the dot centers, relative to “center” (default center is [0 0]).<br>
+“size” is the diameter of each dot in pixels (default is 1). Instead of a common<br>
+size for all dots you can also provide a vector which defines a different dot<br>
+size for each dot. Different graphics cards do have different limits on the<br>
+maximum size of dots, 10 or 63 are typical limits.<br>
+“color” is the the clut index (scalar or [r g b a] vector) that you want to poke<br>
+into each dot pixel (default is black).  Instead of a single “color” you can<br>
+also provide a 3 or 4 row vector,which specifies an individual RGB or RGBA color<br>
+for each corresponding point.<br>
+“dot_type” is a flag that determines what type of dot is drawn: 0 (default) and<br>
+4 draw square dots, whereas 1, 2 and 3 draw round dots (circles) with<br>
+anti-aliasing: 1 favors performance, 2 tries to use high-quality anti-aliasing,<br>
+if supported by your hardware. 3 Uses a builtin shader-based implementation.<br>
+dot_type 1 and 2 may not be supported by all graphics cards and drivers. On some<br>
+systems <a href="http://psychtoolbox.org/docs/Screen">Screen</a>() will then automatically switch to dot_type 3 - our own<br>
+implementation - in such a case. If you use round dot_type 1, 2 or 3 you’ll also<br>
+need to set a proper blending mode with the <a href="http://psychtoolbox.org/docs/Screen">Screen</a>(‘BlendFunction’) command,<br>
+e.g., GL_SRC_ALPHA + GL_ONE_MINUS_SRC_ALPHA. A dot_type of 4 will draw square<br>
+dots like dot_type 0, but may be faster when drawing lots of dots of different<br>
+sizes by use of an efficient shader based path.<br>
+“lenient” If set to 1, will not check the sizes of dots for validity, so you can<br>
+try requesting sizes bigger than what the hardware claims to support.</p>
+
+<p>The optional return arguments [minSmoothPointSize, maxSmoothPointSize,<br>
+minAliasedPointSize, maxAliasedPointSize] allow you to query the minimum and<br>
+maximum allowed ‘size’ for smooth anti-aliased dots (dot_type 1,2,3) and for non<br>
+anti-aliased square dots (dot_type 0 and 4). Calling […] = <a href="http://psychtoolbox.org/docs/Screen">Screen</a>(‘DrawDots’,<br>
+windowPtr) will only query these point size limits without drawing any dots.</p>
+
+<p>###See also:
+<a href="http://psychtoolbox.org/docs/Screen-BlendFunction">BlendFunction</a></p>
+
+
+</article>
+
+
+<footer>
+  <p> <a href="https://github.com/psychtoolbox-3/psychtoolbox-3.github.com/edit/master/docs/Screen-DrawDots.md">
+    edit and fork this page on GitHub
+  </a>
+  </p>
+  <p>Last updated on <time datetime="2018-12-14T09:43:09+00:00">December 14, 2018</time></p>  
+</footer>
+</section>
+
+</div>
+<script src="./Psychtoolbox-3 - Screen(‘DrawDots’)_files/scale.fix.js.download"></script>
+<script>
+  (function() {
+    var langRe = /\blang(?:uage)?-([\w.]+)(?!\S)/;
+    var codeblocks = document.getElementsByTagName('code');
+    for (var i = 0; i < codeblocks.length; i++) {
+      if (codeblocks[i].className.match(langRe) && codeblocks[i].parentNode.nodeName.toLowerCase() === 'pre') {
+        codeblocks[i].parentNode.classList.add('prettyprint');
+        if (codeblocks[i].classList.contains('language-matlab')) {
+          codeblocks[i].parentNode.classList.add('light');
+        }
+      }
+    }
+  })();
+</script>
+
+</body></html>
