@@ -1,4 +1,4 @@
-function [initialY, velocity] = singleDot(screenInfo, duration)
+function [initialY, velocity] = singleDot(screenInfo, duration, dispStepRamp)
 
 %% Parameter Setting
 
@@ -6,7 +6,7 @@ function [initialY, velocity] = singleDot(screenInfo, duration)
 curWindow = screenInfo.curWindow;
 screenRect = screenInfo.screenRect;
 monRefresh = screenInfo.monRefresh;
-distance = screenRect(3);
+distance = screenRect(3) / 2;
 
 % Return value units
 % 1 - present velocity in pixels/second
@@ -27,11 +27,10 @@ numFrames = round(duration * monRefresh);
 %% Randomly select initial y coord and direction (+/-)
 movingRight = randi(2)-1;
 initialY = rand() * (upperBound-lowerBound) + lowerBound;
+center = [screenRect(3)/2 initialY];
 if movingRight
-    center = [0 initialY];
     v_pixsec = distance/duration;
 else
-    center = [screenRect(3) initialY];
     v_pixsec = distance/duration * -1;
 end
 v_pixframe = v_pixsec * 1/monRefresh;
@@ -44,6 +43,16 @@ else
 end
 
 %% Actual drawing code
+if dispStepRamp 
+    rampDistance = 200 * sign(v_pixframe) * -1;
+    Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
+    Screen('Flip', curWindow);
+    pause(0.100);
+    Screen('DrawDots', curWindow, [center(1) + rampDistance, center(2)], 20, [255 255 255], [0 0], 1);
+    Screen('Flip', curWindow);
+    pause(0.100);
+end
+
 while numFrames
     center(1) = center(1) + v_pixframe;
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);

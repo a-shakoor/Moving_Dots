@@ -16,6 +16,7 @@ dir = rawDotInfo.dir;
 apVel = rawDotInfo.apVel;
 dotInfo.isSingleDotTrial = rawDotInfo.isSingleDotTrial;
 dotInfo.singleDotDuration = rawDotInfo.singleDotDuration;
+dotInfo.cohDuration = rawDotInfo.cohDuration;
 
 
 %% COHERENCE LEVEL (out of 1) DEFAULT SET
@@ -84,12 +85,12 @@ dotInfo.speed = 100;
 %       distance in pixels = screenInfo.screenRect(1) / 2 * radius
 %       velocity in pixels/second = (pixels / frame) * (frame / second)
 %                                 = (apVel) * (screenInfo.monRefresh)
-if apVel == 0
-    dotInfo.maxDotTime = 2;
-else
-    dotInfo.maxDotTime = (screenInfo.screenRect(3) / 2 * dotInfo.apXYD(:,3)/2/10*screenInfo.ppd) ...
-                         / (apVel * screenInfo.monRefresh)
-end
+%if apVel == 0
+%    dotInfo.maxDotTime = 2;
+%else
+%    dotInfo.maxDotTime = (screenInfo.screenRect(3) / 2 * dotInfo.apXYD(:,3)/2/10*screenInfo.ppd) ...
+%                         / (apVel * screenInfo.monRefresh)
+%end
     
 
 dotInfo.dotColor = [255 255 255]; % white dots default

@@ -18,7 +18,7 @@ function output(outputStructs)
     %% Array of Event Times
     % [Trial #, Coherent On, Coherent Off, Single Dot On, Single Dot Off,
     %  Reponse Time]
-        folderPath = 'C:\Users\ashaq\Google Drive\New Dropbox\Moving Dots\Results';
+        folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
         timestamp = datestr(now);
         timestamp = strrep(timestamp,'/','-');
         timestamp = strrep(timestamp,' ','_');
@@ -40,7 +40,7 @@ function output(outputStructs)
     % [Trail #, Coherence, Direction of Dots, Aperature Velocity, 
     %  User Response, Correct or Not, Single Dot's Initial Y, 
     %  Single Dot's Velocity, Maximum Time For Decision]
-        folderPath = 'C:\Users\ashaq\Google Drive\New Dropbox\Moving Dots\Results';
+        folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
         timestamp = datestr(now);
         timestamp = strrep(timestamp,'/','-');
         timestamp = strrep(timestamp,' ','_');

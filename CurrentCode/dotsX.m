@@ -88,7 +88,9 @@ flashDuration = .1; %in secs
 
 % Code is executed in Section 5
 isSingleDotTrial = dotInfo.isSingleDotTrial;
+dispStepRamp = dotInfo.dispStepRamp;
 singleDotDuration = dotInfo.singleDotDuration;
+dotInfo.maxDotTime = dotInfo.cohDuration;
 decisionMaxTime = dotInfo.decisionMaxTime; % time to make a decision in seconds
 
 drawCenter = 0; %set equal to one to put red dot in center of aperature
@@ -191,7 +193,8 @@ if ~isfield(dotInfo,'maxDotTime') || (isempty(dotInfo.maxDotTime) && ndots>0)
     continue_show = -1;
 elseif ndots > 0
     continue_show = round(dotInfo.maxDotTime*screenInfo.monRefresh);
-    disp(continue_show)
+    disp("continue show: " + continue_show)
+    disp("monrefresh: " + screenInfo.monRefresh)
 else
     continue_show = 0;
 end
@@ -371,13 +374,14 @@ timeCoherentOff = GetSecs;
 
 if isSingleDotTrial
     timeSingleDotOn = GetSecs;
-    [singleDotInitialY, singleDotVelocity] = singleDot(screenInfo, singleDotDuration);
+    [singleDotInitialY, singleDotVelocity] = singleDot(screenInfo, singleDotDuration, dispStepRamp);
     timeSingleDotOff = GetSecs;
     KbQueueRelease();
     % Checks for code after singleDot ends
     initDecisionTimeFrames = round(decisionMaxTime * screenInfo.monRefresh);
     decisionTimeFrames = initDecisionTimeFrames;
-    while decisionTimeFrames > 0
+    answered = 0;
+    while (decisionTimeFrames > 0 || decisionTimeFrames < 0) && ~answered
         decisionTimeFrames = decisionTimeFrames - 1;
         if ~isempty(keys)
             [keyIsDown,secs,keyCode] = KbCheck;
@@ -402,7 +406,7 @@ if isSingleDotTrial
                     else
                         correct = 0;
                     end
-                    decisionTimeFrames = 0;
+                    answered = 1;
                 end
              end
         KbQueueRelease();
@@ -416,11 +420,12 @@ end %if
 
 
 %% Section 6: End of Trial. Feedback and Output.
-
-if coh == 0 %% present random feedback if coherence is 0
-     presentFeedback(screenInfo, randi(2) - 1);
-elseif correct >= 0
-     presentFeedback(screenInfo, correct);
+if dotInfo.presentFeedback
+    if coh == 0 %% present random feedback if coherence is 0
+         presentFeedback(screenInfo, randi(2) - 1);
+    elseif correct >= 0
+         presentFeedback(screenInfo, correct);
+    end
 end
 
 outputStruct.coh = coh;
