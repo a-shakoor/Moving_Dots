@@ -22,9 +22,15 @@ try
                                % This is irrelevant if not a single dot trial.
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
-    decisionMaxTime = -1;     % Maximum time allowed to make a decision. -1 if unlimited time
+    decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     pauseAfterFixation = .200;
+    
+    % ScreenInfo Parameters
+    monWidth = 30.4;
+    viewDist = 75;
+    screenNum = 0;
+    pupilNetworkOn = 0;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
     numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
@@ -55,10 +61,11 @@ try
     % Output saved in trialInfo
    
     % Initialize the screen and pupil network
-    % touchscreen is 34, laptop is 32, viewsonic is 38
-    screenInfo = openExperiment(34,50,0);
-    %[hUDP, eyeProperties] = startPupilNetwork();
-    disp("reached here")
+    screenInfo = openExperiment(monWidth,viewDist,screenNum);
+    if pupilNetworkOn
+        [hUDP, eyeProperties] = startPupilNetwork();
+    end
+    
     % Run through each trial
     for i = 1:numberOfTrials
         rawDotInfo = dotInfos(i);

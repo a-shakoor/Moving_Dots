@@ -7,6 +7,8 @@ curWindow = screenInfo.curWindow;
 screenRect = screenInfo.screenRect;
 monRefresh = screenInfo.monRefresh;
 distance = screenRect(3) / 2;
+stepRampTimeBackToCenter = .150;
+distanceFromMonitor = 75; % in cm
 
 % Return value units
 % 1 - present velocity in pixels/second
@@ -44,13 +46,18 @@ end
 
 %% Actual drawing code
 if dispStepRamp 
-    rampDistance = 200 * sign(v_pixframe) * -1;
+    rampDistance = (v_pixsec * -1) * stepRampTimeBackToCenter; % d = v * t
+
+    %draw center
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
-    pause(0.100);
-    Screen('DrawDots', curWindow, [center(1) + rampDistance, center(2)], 20, [255 255 255], [0 0], 1);
+    
+    %flash to step ramp
+    center = [center(1) + rampDistance, center(2)];
+    Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
-    pause(0.100);
+    %pause(1);
+    disp("Visual Angle = " + abs(rampDistance)/screenInfo.ppd);
 end
 
 while numFrames
