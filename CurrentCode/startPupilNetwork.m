@@ -3,7 +3,6 @@ function [hUDP, eyeProperties] = startPupilNetwork()
 % construct the pupil UDP
 hUDP = udp('127.0.0.1','LocalPort',8821,'Timeout',0.5);
 eyeProperties.timerPeriod = 100; % in seconds 0.05 = 50 ms
-
 fopen(hUDP);
 eyeProperties.isOpen = true;
 
@@ -18,8 +17,8 @@ end
 
 
 for i = 1:100
-pupil_val = pupilRead(hUDP, eyeProperties);
-pupil_vals(i) = pupil_val;
+    pupil_val = pupilRead(hUDP, eyeProperties);
+    pupil_vals(i) = pupil_val;
 end
 
 %  folderPath = 'C:\Users\ashaq\Google Drive\New Dropbox\Moving Dots\Results';

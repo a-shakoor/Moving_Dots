@@ -1,13 +1,14 @@
 function [initialY, velocity] = singleDot(screenInfo, duration, dispStepRamp)
 
 %% Parameter Setting
+% duration = time to get from center to end of screen (AFTER STEPRAMP)
 
 % distance = length of monitor (screenRect(3))
 curWindow = screenInfo.curWindow;
 screenRect = screenInfo.screenRect;
 monRefresh = screenInfo.monRefresh;
 distance = screenRect(3) / 2;
-stepRampTimeBackToCenter = .150;
+stepRampAngle = 1.5; % this determines how far out to put the stepramp
 distanceFromMonitor = 75; % in cm
 
 % Return value units
@@ -23,9 +24,6 @@ lowerBound = screenRect(2) + 1/4 * screenRect(4);
 upperBound = screenRect(2) + 3/4 * screenRect(4);
 
 
-%% Parameter: duration - time to traverse entire screen.
-% velocity dependent on this
-numFrames = round(duration * monRefresh);
 
 %% Randomly select initial y coord and direction (+/-)
 movingRight = randi(2)-1;
@@ -51,8 +49,10 @@ end
 
 %% Actual drawing code
 if dispStepRamp 
-    rampDistance = (v_pixsec * -1) * stepRampTimeBackToCenter; % d = v * t
-
+    %rampDistance = (v_pixsec * -1 * stepRampTimeBackToCenter;
+    rampDistance = stepRampAngle * screenInfo.ppd * sign(v_pixsec) * -1 % in pixels
+    duration = duration + abs(rampDistance / v_pixsec)
+    
     %draw center
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
@@ -61,10 +61,11 @@ if dispStepRamp
     center = [center(1) + rampDistance, center(2)];
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
-    %pause(1);
-    disp("Visual Angle = " + abs(rampDistance)/screenInfo.ppd);
-end
 
+    %pause(1);
+    visualAngle = abs(rampDistance)/screenInfo.ppd
+end
+numFrames = ceil(duration * monRefresh);
 while numFrames
     center(1) = center(1) + v_pixframe;
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);

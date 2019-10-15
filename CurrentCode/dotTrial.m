@@ -18,8 +18,7 @@ try
     isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
                                % screen following the coherent dots
     presentFeedback = 0;       % 1 or 0
-    dispStepRamp = 1;          % time for single dot to traverse screen (secs)
-                               % This is irrelevant if not a single dot trial.
+    dispStepRamp = 1;          % Should a stepramp be displayed
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
     decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
@@ -28,10 +27,10 @@ try
     dispFixationCircle = 1;
     
     % ScreenInfo Parameters
-    monWidth = 30.4; %30.4 for xps
+    monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 0;
-    pupilNetworkOn = 0;
+    screenNum = 1;
+    pupilNetworkOn = 1;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
     numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
@@ -63,6 +62,8 @@ try
    
     % Initialize the screen and pupil network
     screenInfo = openExperiment(monWidth,viewDist,screenNum);
+    disp('reached here')
+
     if pupilNetworkOn
         [hUDP, eyeProperties] = startPupilNetwork();
     end
@@ -84,8 +85,8 @@ try
         
         %Step 2 of 2: Pass in dotinfo struct to dotsX to run trial
         % THIS STARTS THE ACTUAL TRIAL
-        %startTimeSystem = GetSecs
-        %startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
+        startTimeSystem = GetSecs
+        startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
         calibrationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
         fixationCross(.200, 60, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);

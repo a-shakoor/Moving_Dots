@@ -190,8 +190,8 @@ if ~isfield(dotInfo,'maxDotTime') || (isempty(dotInfo.maxDotTime) && ndots>0)
     continue_show = -1;
 elseif ndots > 0
     continue_show = round(dotInfo.maxDotTime*screenInfo.monRefresh);
-    disp("continue show: " + continue_show)
-    disp("monrefresh: " + screenInfo.monRefresh)
+    disp('continue show: ' + continue_show);
+    disp('monrefresh: ' + screenInfo.monRefresh);
 else
     continue_show = 0;
 end
