@@ -18,6 +18,7 @@ presentVelocityInSeconds = 1;
 % y-coordinate bounds (for the jitter in y)
 % note: lowerBound is actually the "top" bound on the screen b/c
 % coordinates increase as you go down the screen
+putJitterInY = 0; % 0 or 1
 lowerBound = screenRect(2) + 1/4 * screenRect(4);
 upperBound = screenRect(2) + 3/4 * screenRect(4);
 
@@ -28,7 +29,11 @@ numFrames = round(duration * monRefresh);
 
 %% Randomly select initial y coord and direction (+/-)
 movingRight = randi(2)-1;
-initialY = rand() * (upperBound-lowerBound) + lowerBound;
+if putJitterInY
+    initialY = rand() * (upperBound-lowerBound) + lowerBound;
+else
+    initialY = screenRect(4) / 2;
+end
 center = [screenRect(3)/2 initialY];
 if movingRight
     v_pixsec = distance/duration;

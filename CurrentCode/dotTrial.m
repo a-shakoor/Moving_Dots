@@ -11,7 +11,7 @@ try
     dirSet = [0 180];              % possible direction of coherently moving dots
                                    % 0 or 180. 0 is right, 180 is left
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
-    cohDurationSet = [.100, .200, .400];
+    cohDurationSet = [1]; % [.100, .200, .400];
                                
     trialsPerCondition = 1;
     pauseBetweenTrials = 1;
@@ -25,9 +25,10 @@ try
     decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     pauseAfterFixation = .200;
+    dispFixationCircle = 1;
     
     % ScreenInfo Parameters
-    monWidth = 30.4;
+    monWidth = 30.4; %30.4 for xps
     viewDist = 75;
     screenNum = 0;
     pupilNetworkOn = 0;
@@ -79,12 +80,13 @@ try
         dotInfo.decisionMaxTime = decisionMaxTime;
         dotInfo.presentFeedback = presentFeedback;
         dotInfo.dispStepRamp = dispStepRamp;
+        dotInfo.dispFixationCircle = dispFixationCircle;
         
         %Step 2 of 2: Pass in dotinfo struct to dotsX to run trial
         % THIS STARTS THE ACTUAL TRIAL
-        %startTimeSystem = GetSecs;
-        %startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties);
-        fixationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
+        %startTimeSystem = GetSecs
+        %startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
+        calibrationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
         fixationCross(.200, 60, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);
         outputStruct = dotsX(screenInfo, dotInfo);

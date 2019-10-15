@@ -1,4 +1,4 @@
- function fixationCircle(onDuration, radius, screenInfo)
+ function calibrationCircle(onDuration, radius, screenInfo)
     screenRect = screenInfo.screenRect;
     curWindow = screenInfo.curWindow;
     rect = [screenRect(3)/2-radius,screenRect(4)/10-radius,screenRect(3)/2+radius,screenRect(4)/10+radius];

@@ -93,9 +93,6 @@ singleDotDuration = dotInfo.singleDotDuration;
 dotInfo.maxDotTime = dotInfo.cohDuration;
 decisionMaxTime = dotInfo.decisionMaxTime; % time to make a decision in seconds
 
-drawCenter = 0; %set equal to one to put red dot in center of aperature
-
-
 %%%%%% NOTE: These aren't changed normally %%%%%%%%%5
 curWindow = screenInfo.curWindow;
 dotColor = dotInfo.dotColor;
@@ -279,7 +276,7 @@ while continue_show
         % aperture size to both the x and y directions.
         dot_show{df} = (this_x{df} - d_ppd(df)/2)';
     end
-    
+
     % After all computations, flip to draws dots from the previous loop. For the
     % first time, this doesn't draw anything.
     if continue_show == initVal - 1 % because first dots on drawn on the second iteration
@@ -308,8 +305,8 @@ while continue_show
         dots2Display(:,outCircle) = NaN;
         
         Screen('DrawDots',curWindow,dots2Display,dotSize,dotColor,center(df,1:2));
-        if(drawCenter == 1)
-            Screen('DrawDots', curWindow, [0 0], dotSize * 2, [255 0 0], center(df, 1:2));
+        if(dotInfo.dispFixationCircle == 1)
+            Screen('DrawDots', curWindow, [0 0], dotSize * 3, [255 0 0], center(df, 1:2));
         end
     end
     
