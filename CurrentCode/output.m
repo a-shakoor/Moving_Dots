@@ -18,7 +18,7 @@ function output(outputStructs)
     %% Array of Event Times
     % [Trial #, Coherent On, Coherent Off, Single Dot On, Single Dot Off,
     %  Reponse Time]
-        folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
+        folderPath = 'C:\Users\SENSORIMOTOR\Desktop\pupil\Moving_Dots\Results';
         timestamp = datestr(now);
         timestamp = strrep(timestamp,'/','-');
         timestamp = strrep(timestamp,' ','_');
@@ -28,19 +28,21 @@ function output(outputStructs)
     for i = 1:size(outputStructs,2)
         outputStruct = outputStructs(i);
         eventTimes(i,1) = i;
-        eventTimes(i,2) = outputStruct.timeCoherentOn;
-        eventTimes(i,3) = outputStruct.timeCoherentOff;
-        eventTimes(i,4) = outputStruct.timeSingleDotOn;
-        eventTimes(i,5) = outputStruct.timeSingleDotOff;
-        eventTimes(i,6) = outputStruct.timeResponse;
+        eventTimes(i,2) = outputStruct.startTimeSystem;
+        eventTimes(i,3) = outputStruct.startTimePupil;
+        eventTimes(i,4) = outputStruct.timeCoherentOn;
+        eventTimes(i,5) = outputStruct.timeCoherentOff;
+        eventTimes(i,6) = outputStruct.timeSingleDotOn;
+        eventTimes(i,7) = outputStruct.timeSingleDotOff;
+        eventTimes(i,8) = outputStruct.timeResponse;
     end
-    csvwrite(filename, eventTimes)
+    dlmwrite(filename, eventTimes,'precision',9)
 
     %% Array of Trial Info
     % [Trail #, Coherence, Direction of Dots, Aperature Velocity, 
     %  User Response, Correct or Not, Single Dot's Initial Y, 
     %  Single Dot's Velocity, Maximum Time For Decision]
-        folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
+        folderPath = 'C:\Users\SENSORIMOTOR\Desktop\pupil\Moving_Dots\Results';
         timestamp = datestr(now);
         timestamp = strrep(timestamp,'/','-');
         timestamp = strrep(timestamp,' ','_');
@@ -59,7 +61,7 @@ function output(outputStructs)
         trialInfos(i,8) = outputStruct.singleDotVelocity;
         trialInfos(i,9) = outputStruct.decisionMaxTime;
     end
-    csvwrite(filename, trialInfos)    
+    dlmwrite(filename, trialInfos,'precision',9)    
     
 
 

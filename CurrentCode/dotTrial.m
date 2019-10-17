@@ -61,12 +61,14 @@ try
     % Output saved in trialInfo
    
     % Initialize the screen and pupil network
-    screenInfo = openExperiment(monWidth,viewDist,screenNum);
-    disp('reached here')
-
+    
     if pupilNetworkOn
         [hUDP, eyeProperties] = startPupilNetwork();
     end
+    
+    screenInfo = openExperiment(monWidth,viewDist,screenNum);
+    disp('reached here')
+
     
     % Run through each trial
     for i = 1:numberOfTrials
@@ -90,7 +92,7 @@ try
         calibrationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
         fixationCross(.200, 60, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);
-        outputStruct = dotsX(screenInfo, dotInfo);
+        outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil);
         outputStructs(i) = outputStruct;
         pause(pauseBetweenTrials);
     end

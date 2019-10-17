@@ -16,7 +16,7 @@ else
 end
 
 
-for i = 1:100
+for i = 1:10
     pupil_val = pupilRead(hUDP, eyeProperties);
     pupil_vals(i) = pupil_val;
 end

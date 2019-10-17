@@ -1,4 +1,4 @@
-function outputStruct = dotsX(screenInfo,dotInfo)
+function outputStruct = dotsX(screenInfo,dotInfo, startTimeSystem, startTimePupil)
 % DOTSX display dots on screen
 %
 % [dir, apVel, frames,rseed,start_time,end_time,response,response_time] = dotsX(screenInfo,dotInfo)
@@ -438,6 +438,8 @@ outputStruct.timeCoherentOff = timeCoherentOff - timeCoherentOn;
 outputStruct.timeSingleDotOn = timeSingleDotOn - timeCoherentOn;
 outputStruct.timeSingleDotOff = timeSingleDotOff - timeCoherentOn;
 outputStruct.timeResponse = timeResponse - timeCoherentOn;
+outputStruct.startTimeSystem = startTimeSystem;
+outputStruct.startTimePupil = startTimePupil;
 
 
 Priority(0);
