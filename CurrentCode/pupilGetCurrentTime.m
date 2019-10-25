@@ -1,5 +1,6 @@
 function time = pupilGetCurrentTime(hUDP, eyeProperties)
 
+time = -1
 pupil_vals.gazeTime = NaN(1,'single');
 
 % return early if not connected

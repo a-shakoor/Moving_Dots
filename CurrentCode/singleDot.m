@@ -1,4 +1,4 @@
-function [initialY, velocity, singleDotOn, singleDotBackToCenter, singleDotOff] = singleDot(screenInfo, duration, dispStepRamp)
+function [initialY, velocity, singleDotOn, singleDotBackToCenter, singleDotOff] = singleDot(screenInfo, trialNum, duration, dispStepRamp)
 
 %% Parameter Setting
 % duration = time to get from center to end of screen (AFTER STEPRAMP)
@@ -12,7 +12,6 @@ stepRampAngle = 1.5; % this determines how far out to put the stepramp
 distanceFromMonitor = 75; % in cm
 singleDotBackToCenter = -1;
 stepRampTimeBackToCenter = .150;
-
 % Return value units
 % 1 - present velocity in pixels/second
 % 0 - present velocity in pixels/frame
@@ -70,13 +69,25 @@ if dispStepRamp
     visualAngle = abs(rampDistance)/screenInfo.ppd
 end
 numFrames = ceil(duration * monRefresh);
+singleDotPositions = zeros([numFrames 3]);
+currentRow = 1;
 while numFrames
     center(1) = center(1) + v_pixframe;
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
+    singleDotPositions(currentRow, 1:3) = [GetSecs center(1) center(2)];
+    currentRow = currentRow + 1;
     numFrames = numFrames - 1;
-    
 end
 Screen('Flip', curWindow);
 singleDotOff = GetSecs;
+
+%% Array of Event Times
+folderPath = 'C:\Users\SENSORIMOTOR\Desktop\pupil\Moving_Dots\Results';
+timestamp = datestr(now);
+timestamp = strrep(timestamp,'/','-');
+timestamp = strrep(timestamp,' ','_');
+timestamp = strrep(timestamp,':','-');
+filename = strcat(folderPath, '\','Trial-',num2str(trialNum),'-',timestamp, '.csv');
+dlmwrite(filename, singleDotPositions,'precision',14)
 end

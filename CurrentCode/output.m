@@ -24,17 +24,18 @@ function output(outputStructs)
         timestamp = strrep(timestamp,' ','_');
         timestamp = strrep(timestamp,':','-');
         filename = strcat(folderPath, '\','EventTimes-',timestamp, '.csv');
-        eventTimes = zeros(size(outputStructs,1),6);
+        eventTimes = zeros(size(outputStructs,1),9);
     for i = 1:size(outputStructs,2)
         outputStruct = outputStructs(i);
         eventTimes(i,1) = i;
         eventTimes(i,2) = outputStruct.startTimeSystem;
         eventTimes(i,3) = outputStruct.startTimePupil;
-        eventTimes(i,4) = outputStruct.timeCoherentOn;
-        eventTimes(i,5) = outputStruct.timeCoherentOff;
-        eventTimes(i,6) = outputStruct.timeSingleDotOn;
-        eventTimes(i,7) = outputStruct.timeSingleDotOff;
-        eventTimes(i,8) = outputStruct.timeResponse;
+        eventTimes(i,4) = outputStruct.originalTimeCoherentOn;
+        eventTimes(i,5) = outputStruct.timeCoherentOn;
+        eventTimes(i,6) = outputStruct.timeCoherentOff;
+        eventTimes(i,7) = outputStruct.timeSingleDotOn;
+        eventTimes(i,8) = outputStruct.timeSingleDotOff;
+        eventTimes(i,9) = outputStruct.timeResponse;
     end
     dlmwrite(filename, eventTimes,'precision',9)
 
@@ -48,18 +49,20 @@ function output(outputStructs)
         timestamp = strrep(timestamp,' ','_');
         timestamp = strrep(timestamp,':','-');
         filename = strcat(folderPath, '\','TrialInfo-',timestamp, '.csv');
-        trialInfos = zeros(size(outputStructs,1),9);
+        trialInfos = zeros(size(outputStructs,1),11);
     for i = 1:size(outputStructs,2)
         outputStruct = outputStructs(i);
         trialInfos(i,1) = i;
-        trialInfos(i,2) = outputStruct.coh;
-        trialInfos(i,3) = outputStruct.dir;
-        trialInfos(i,4) = outputStruct.apVel;
-        trialInfos(i,5) = outputStruct.response;
-        trialInfos(i,6) = outputStruct.correct;
-        trialInfos(i,7) = outputStruct.singleDotInitialY;
-        trialInfos(i,8) = outputStruct.singleDotVelocity;
-        trialInfos(i,9) = outputStruct.decisionMaxTime;
+        trialInfos(i,2) = outputStruct.cohDuration;
+        trialInfos(i,3) = outputStruct.coh;
+        trialInfos(i,4) = outputStruct.dir;
+        trialInfos(i,5) = outputStruct.singleDotVelocity;
+        trialInfos(i,6) = outputStruct.cohSingleDotCongruent;
+        trialInfos(i,7) = outputStruct.response;
+        trialInfos(i,8) = outputStruct.correct;
+        trialInfos(i,9) = outputStruct.singleDotInitialY;
+        trialInfos(i,10) = outputStruct.singleDotVelocity;
+        trialInfos(i,11) = outputStruct.decisionMaxTime;
     end
     dlmwrite(filename, trialInfos,'precision',9)    
     

@@ -7,14 +7,14 @@ try
    %% Paramaters
     
     % Put all possible parameters in the following 3 sets
-    cohSet = [.1, .2];
-    % cohSet = [.03 .06 .12 .24 .48];    % dot coherence on interval [0,1]
+    %cohSet = [.1, .2, .4];
+    cohSet = [.03, .06, .12, .24, .48]    % dot coherence on interval [0,1]
     dirSet = [-1];              % possible direction of coherently moving dots
                                    % 0 or 180. 0 is right, 180 is left
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
-    cohDurationSet = [1]; % [.100, .200, .400];
+    cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 1;
+    trialsPerCondition = 8;
     pauseBetweenTrials = 1;
     isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
                                % screen following the coherent dots
@@ -30,8 +30,8 @@ try
     % ScreenInfo Parameters
     monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 0;
-    pupilNetworkOn = 0;
+    screenNum = 1;
+    pupilNetworkOn = 1;
     startTimePupil = 0;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
@@ -65,12 +65,14 @@ try
    
     % Initialize the screen and pupil network
     
+   
+    screenInfo = openExperiment(monWidth,viewDist,screenNum);
+    disp('reached here')
+    
     if pupilNetworkOn
         [hUDP, eyeProperties] = startPupilNetwork();
     end
     
-    screenInfo = openExperiment(monWidth,viewDist,screenNum);
-    disp('reached here')
 
     
     % Run through each trial
@@ -87,10 +89,12 @@ try
         dotInfo.presentFeedback = presentFeedback;
         dotInfo.dispStepRamp = dispStepRamp;
         dotInfo.dispFixationCircle = dispFixationCircle;
+        dotInfo.trialNum = i;
         
         %Step 2 of 2: Pass in dotinfo struct to dotsX to run trial
         % THIS STARTS THE ACTUAL TRIAL
         startTimeSystem = GetSecs
+        startTimePupil = -1;
         if pupilNetworkOn
             startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
         end
@@ -107,7 +111,9 @@ try
     
     
     %% Clear the screen and exit
-    closePupilNetwork(hUDP);
+    if pupilNetworkOn
+        closePupilNetwork(hUDP);
+    end
     closeExperiment;
     
 catch
