@@ -370,9 +370,8 @@ timeCoherentOff = GetSecs;
 %% Section 5: Single Dot
 
 if isSingleDotTrial
-    timeSingleDotOn = GetSecs;
-    [singleDotInitialY, singleDotVelocity] = singleDot(screenInfo, singleDotDuration, dispStepRamp);
-    timeSingleDotOff = GetSecs;
+    [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter singleDotOff] ...
+        = singleDot(screenInfo, singleDotDuration, dispStepRamp);
     KbQueueRelease();
     % Checks for code after singleDot ends
     initDecisionTimeFrames = round(decisionMaxTime * screenInfo.monRefresh);
@@ -435,8 +434,9 @@ outputStruct.singleDotVelocity = singleDotVelocity;
 outputStruct.decisionMaxTime = decisionMaxTime;
 outputStruct.timeCoherentOn = timeCoherentOn - timeCoherentOn;
 outputStruct.timeCoherentOff = timeCoherentOff - timeCoherentOn;
-outputStruct.timeSingleDotOn = timeSingleDotOn - timeCoherentOn;
-outputStruct.timeSingleDotOff = timeSingleDotOff - timeCoherentOn;
+outputStruct.timeSingleDotOn = singleDotOn - timeCoherentOn;
+outputStruct.timeSingleDotBackToCenter = singleDotBackToCenter - timeCoherentOn;
+outputStruct.timeSingleDotOff = singleDotOff - timeCoherentOn;
 outputStruct.timeResponse = timeResponse - timeCoherentOn;
 outputStruct.startTimeSystem = startTimeSystem;
 outputStruct.startTimePupil = startTimePupil;

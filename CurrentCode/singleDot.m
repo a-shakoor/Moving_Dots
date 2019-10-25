@@ -1,4 +1,4 @@
-function [initialY, velocity] = singleDot(screenInfo, duration, dispStepRamp)
+function [initialY, velocity, singleDotOn, singleDotBackToCenter, singleDotOff] = singleDot(screenInfo, duration, dispStepRamp)
 
 %% Parameter Setting
 % duration = time to get from center to end of screen (AFTER STEPRAMP)
@@ -10,6 +10,8 @@ monRefresh = screenInfo.monRefresh;
 distance = screenRect(3) / 2;
 stepRampAngle = 1.5; % this determines how far out to put the stepramp
 distanceFromMonitor = 75; % in cm
+singleDotBackToCenter = -1;
+stepRampTimeBackToCenter = .150;
 
 % Return value units
 % 1 - present velocity in pixels/second
@@ -49,13 +51,15 @@ end
 
 %% Actual drawing code
 if dispStepRamp 
-    %rampDistance = (v_pixsec * -1 * stepRampTimeBackToCenter;
-    rampDistance = stepRampAngle * screenInfo.ppd * sign(v_pixsec) * -1 % in pixels
+    rampDistance = (v_pixsec * -1 * stepRampTimeBackToCenter);
+    %rampDistance = stepRampAngle * screenInfo.ppd * sign(v_pixsec) * -1 % in pixels
     duration = duration + abs(rampDistance / v_pixsec)
     
     %draw center
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
+    singleDotOn = GetSecs;
+    originalCenter = center;
     
     %flash to step ramp
     center = [center(1) + rampDistance, center(2)];
@@ -74,7 +78,5 @@ while numFrames
     
 end
 Screen('Flip', curWindow);
-
-
-    
+singleDotOff = GetSecs;
 end
