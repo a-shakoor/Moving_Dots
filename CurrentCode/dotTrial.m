@@ -30,8 +30,8 @@ try
     % ScreenInfo Parameters
     monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 1;
-    pupilNetworkOn = 1;
+    screenNum = 0;
+    pupilNetworkOn = 0;
     startTimePupil = 0;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
