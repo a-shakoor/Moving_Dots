@@ -1,4 +1,4 @@
-function outputStruct = dotsX(screenInfo,dotInfo)
+function outputStruct = dotsX(screenInfo,dotInfo, startTimeSystem, startTimePupil)
 % DOTSX display dots on screen
 %
 % [dir, apVel, frames,rseed,start_time,end_time,response,response_time] = dotsX(screenInfo,dotInfo)
@@ -88,11 +88,10 @@ flashDuration = .1; %in secs
 
 % Code is executed in Section 5
 isSingleDotTrial = dotInfo.isSingleDotTrial;
+dispStepRamp = dotInfo.dispStepRamp;
 singleDotDuration = dotInfo.singleDotDuration;
+dotInfo.maxDotTime = dotInfo.cohDuration;
 decisionMaxTime = dotInfo.decisionMaxTime; % time to make a decision in seconds
-
-drawCenter = 0; %set equal to one to put red dot in center of aperature
-
 
 %%%%%% NOTE: These aren't changed normally %%%%%%%%%5
 curWindow = screenInfo.curWindow;
@@ -191,7 +190,8 @@ if ~isfield(dotInfo,'maxDotTime') || (isempty(dotInfo.maxDotTime) && ndots>0)
     continue_show = -1;
 elseif ndots > 0
     continue_show = round(dotInfo.maxDotTime*screenInfo.monRefresh);
-    disp(continue_show)
+    disp('continue show: ' + continue_show);
+    disp('monrefresh: ' + screenInfo.monRefresh);
 else
     continue_show = 0;
 end
@@ -276,7 +276,7 @@ while continue_show
         % aperture size to both the x and y directions.
         dot_show{df} = (this_x{df} - d_ppd(df)/2)';
     end
-    
+
     % After all computations, flip to draws dots from the previous loop. For the
     % first time, this doesn't draw anything.
     if continue_show == initVal - 1 % because first dots on drawn on the second iteration
@@ -305,8 +305,8 @@ while continue_show
         dots2Display(:,outCircle) = NaN;
         
         Screen('DrawDots',curWindow,dots2Display,dotSize,dotColor,center(df,1:2));
-        if(drawCenter == 1)
-            Screen('DrawDots', curWindow, [0 0], dotSize * 2, [255 0 0], center(df, 1:2));
+        if(dotInfo.dispFixationCircle == 1)
+            Screen('DrawDots', curWindow, [0 0], dotSize * 3, [255 0 0], center(df, 1:2));
         end
     end
     
@@ -370,14 +370,14 @@ timeCoherentOff = GetSecs;
 %% Section 5: Single Dot
 
 if isSingleDotTrial
-    timeSingleDotOn = GetSecs;
-    [singleDotInitialY, singleDotVelocity] = singleDot(screenInfo, singleDotDuration);
-    timeSingleDotOff = GetSecs;
+    [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter singleDotOff] ...
+        = singleDot(screenInfo, dotInfo.trialNum, singleDotDuration, dispStepRamp);
     KbQueueRelease();
     % Checks for code after singleDot ends
     initDecisionTimeFrames = round(decisionMaxTime * screenInfo.monRefresh);
     decisionTimeFrames = initDecisionTimeFrames;
-    while decisionTimeFrames > 0
+    answered = 0;
+    while (decisionTimeFrames > 0 || decisionTimeFrames < 0) && ~answered
         decisionTimeFrames = decisionTimeFrames - 1;
         if ~isempty(keys)
             [keyIsDown,secs,keyCode] = KbCheck;
@@ -402,7 +402,7 @@ if isSingleDotTrial
                     else
                         correct = 0;
                     end
-                    decisionTimeFrames = 0;
+                    answered = 1;
                 end
              end
         KbQueueRelease();
@@ -416,26 +416,34 @@ end %if
 
 
 %% Section 6: End of Trial. Feedback and Output.
-
-if coh == 0 %% present random feedback if coherence is 0
-     presentFeedback(screenInfo, randi(2) - 1);
-elseif correct >= 0
-     presentFeedback(screenInfo, correct);
+if dotInfo.presentFeedback
+    if coh == 0 %% present random feedback if coherence is 0
+         presentFeedback(screenInfo, randi(2) - 1);
+    elseif correct >= 0
+         presentFeedback(screenInfo, correct);
+    end
 end
 
+outputStruct.trialNum = dotInfo.trialNum;
+outputStruct.cohDuration = dotInfo.cohDuration;
 outputStruct.coh = coh;
 outputStruct.dir = dir;
+outputStruct.singleDotVelocity = singleDotVelocity;
+outputStruct.cohSingleDotCongruent = (dir == 0 && singleDotVelocity > 0) || (dir == 180 && singleDotVelocity < 0);
 outputStruct.apVel = apVel;
 outputStruct.response = response;
 outputStruct.correct = correct;
 outputStruct.singleDotInitialY = singleDotInitialY;
-outputStruct.singleDotVelocity = singleDotVelocity;
 outputStruct.decisionMaxTime = decisionMaxTime;
+outputStruct.originalTimeCoherentOn = timeCoherentOn;
 outputStruct.timeCoherentOn = timeCoherentOn - timeCoherentOn;
 outputStruct.timeCoherentOff = timeCoherentOff - timeCoherentOn;
-outputStruct.timeSingleDotOn = timeSingleDotOn - timeCoherentOn;
-outputStruct.timeSingleDotOff = timeSingleDotOff - timeCoherentOn;
+outputStruct.timeSingleDotOn = singleDotOn - timeCoherentOn;
+outputStruct.timeSingleDotBackToCenter = singleDotBackToCenter - timeCoherentOn;
+outputStruct.timeSingleDotOff = singleDotOff - timeCoherentOn;
 outputStruct.timeResponse = timeResponse - timeCoherentOn;
+outputStruct.startTimeSystem = startTimeSystem;
+outputStruct.startTimePupil = startTimePupil;
 
 
 Priority(0);

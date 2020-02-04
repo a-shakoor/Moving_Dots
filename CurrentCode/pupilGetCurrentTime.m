@@ -1,5 +1,6 @@
 function time = pupilGetCurrentTime(hUDP, eyeProperties)
 
+time = -1
 pupil_vals.gazeTime = NaN(1,'single');
 
 % return early if not connected
@@ -76,8 +77,8 @@ end % END of switch pktID
 % if ~isnan(pupil_vals.gazeConfidence)
 %     fprintf('NaNs found....\n');
 % else
-    fprintf('Eye tracking data: [%.2f, %.2f], confidence: %.2f, time: %.2f\n',pupil_vals.gazePosition(1),...
-        pupil_vals.gazePosition(2),pupil_vals.gazeConfidence, pupil_vals.gazeTime)
+%    fprintf('Eye tracking data: [%.2f, %.2f], confidence: %.2f, time: %.2f\n',pupil_vals.gazePosition(1),...
+%        pupil_vals.gazePosition(2),pupil_vals.gazeConfidence, pupil_vals.gazeTime)
 % end
 fclose(hUDP);
 fopen(hUDP);
