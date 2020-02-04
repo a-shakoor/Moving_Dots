@@ -110,9 +110,9 @@ for thistrial = 1:length(eventtimes(:,trial))
     %   25 samples.
     [b,g] = sgolay(sgfOrder,sgfFramelen);
     position = conv(x_gaze3d_ang, factorial(0) * g(:,0+1), 'same');
-    velocity = conv(x_gaze3d_ang, factorial(1) * g(:,1+1) / .007, 'same');
+    velocity = conv(x_gaze3d_ang, factorial(1) * g(:,1+1) / -.007, 'same');
     position_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 0, sgfFramelen);
-    velocity_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 1, sgfFramelen) / .007;
+    velocity_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 1, sgfFramelen) / -.007;
     
     % MATLAB Filtering
     nexttile
