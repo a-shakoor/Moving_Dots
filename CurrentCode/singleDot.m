@@ -52,7 +52,7 @@ end
 if dispStepRamp 
     rampDistance = (v_pixsec * -1 * stepRampTimeBackToCenter);
     %rampDistance = stepRampAngle * screenInfo.ppd * sign(v_pixsec) * -1 % in pixels
-    duration = duration + abs(rampDistance / v_pixsec)
+    duration = duration + abs(rampDistance / v_pixsec);
     
     %draw center
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
@@ -66,7 +66,7 @@ if dispStepRamp
     Screen('Flip', curWindow);
 
     %pause(1);
-    visualAngle = abs(rampDistance)/screenInfo.ppd
+    visualAngle = abs(rampDistance)/screenInfo.ppd;
 end
 numFrames = ceil(duration * monRefresh);
 singleDotPositions = zeros([numFrames 3]);
@@ -83,11 +83,11 @@ Screen('Flip', curWindow);
 singleDotOff = GetSecs;
 
 %% Array of Event Times
-folderPath = 'C:\Users\SENSORIMOTOR\Desktop\pupil\Moving_Dots\Results';
+folderPath = 'C:\Users\KinArmLab\Documents\MATLAB\Aly\Moving_Dots\Results';
 timestamp = datestr(now);
 timestamp = strrep(timestamp,'/','-');
 timestamp = strrep(timestamp,' ','_');
 timestamp = strrep(timestamp,':','-');
 filename = strcat(folderPath, '\','Trial-',num2str(trialNum),'-',timestamp, '.csv');
-%dlmwrite(filename, singleDotPositions,'precision',14)
+dlmwrite(filename, singleDotPositions,'precision',14)
 end

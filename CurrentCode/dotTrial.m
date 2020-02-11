@@ -1,5 +1,5 @@
 % Universal script for running a dot trial
-
+% python C:\Users\KinArmLab\Documents\MATLAB\Aly\Moving_Dots\CurrentCode\pythonPupil.py
 function success = dotTrial()
 
 try 
@@ -14,7 +14,7 @@ try
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 8;
+    trialsPerCondition = 6;
     pauseBetweenTrials = 1;
     isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
                                % screen following the coherent dots
@@ -31,10 +31,10 @@ try
     % ScreenInfo Parameters
     monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 0;
-    pupilNetworkOn = 0;
-    startTimePupil = 0;
-    runOutput = 0;
+    screenNum = 1;
+    pupilNetworkOn = 1;
+    startTimePupil = 1;
+    runOutput = 1;
     
     % Rest
     restEveryXTrials = 40;
@@ -109,7 +109,7 @@ try
         calibrationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
         fixationCross(.200, fixationCrossSize, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);
-        outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil);
+        outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil)
         outputStructs(i) = outputStruct;
         pause(pauseBetweenTrials);
     end
