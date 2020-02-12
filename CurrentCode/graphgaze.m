@@ -27,8 +27,8 @@ posx_norm_ind = 4;
 posy_norm_ind = 5;
 posx_gaze3d_ind = 8;
 
-gazefilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Aly11-18-19/gaze_positions.csv';
-eventtimesfilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Aly11-18-19/EventTimes-18-Nov-2019_15-03-41.csv';
+gazefilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/gaze_positions.csv';
+eventtimesfilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/EventTimes-11-Feb-2020_10-18-03.csv';
 rawfile = csvread(gazefilepath, 1, 0); % Offsets to start at 2nd row (after headers)
 eventtimes = csvread(eventtimesfilepath);
 
@@ -37,7 +37,7 @@ eventtimes = csvread(eventtimesfilepath);
 rawfile = rawfile(rawfile(:,conf_ind) > 0.7, :);
 
 %% Throw out first X trials
-firstValidTrial = 6;
+firstValidTrial = 1;
 eventtimes = eventtimes(eventtimes(:, 1) >= firstValidTrial, :);
 
 %% Run through each Trial
@@ -45,8 +45,8 @@ clf
 hold off
 hold on
 trialsWithoutPupil = zeros(1, 1);
-tiledlayout(3,1)
-for thistrial = 10 % 1:length(eventtimes(:,trial))
+%tiledlayout(3,1)
+for thistrial = 1:length(eventtimes(:,trial))
     %% Filter both csv's to just the trial time ranges
     thisTrialRow = eventtimes(thistrial,:);   
     trialNumber = thisTrialRow(1);
@@ -112,26 +112,25 @@ for thistrial = 10 % 1:length(eventtimes(:,trial))
     %   derivatives via a fifth order polynomial and a frame length of
     %   25 samples.
     [b,g] = sgolay(sgfOrder,sgfFramelen);
-    position = conv(x_gaze3d_ang, factorial(0) * g(:,0+1), 'same');
-    velocity = conv(x_gaze3d_ang, factorial(1) * g(:,1+1) / .007, 'same');
+    %position = conv(x_gaze3d_ang, factorial(0) * g(:,0+1), 'same');
+    %velocity = conv(x_gaze3d_ang, factorial(1) * g(:,1+1) / .007, 'same');
     position_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 0, sgfFramelen);
-    velocity_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 1, sgfFramelen) / .007;
+    velocity_ext = savitzkyGolayFilt(x_gaze3d_ang, sgfOrder, 1, sgfFramelen) / -.008333;
     
     % Filtered Position on the left axis
-    plot(t, position, '-o','MarkerIndices',1:length(t))
+    % plot(t, position, '-o','MarkerIndices',1:length(t))
     plot(t, position_ext, '-o','MarkerIndices',1:length(t))
 
     
     % Velocity on the right axis
     yyaxis right
-    plot(t, velocity, '-o','MarkerIndices',1:length(t))
+    %plot(t, velocity, '-o','MarkerIndices',1:length(t))
     plot(t, velocity_ext, '-o','MarkerIndices',1:length(t))
 
 
     %% Figure Options
-    legend('Raw Position','MATLAB Filtered Position', 'Externally Filtered Position', ...
-        'MATLAB Filtered Velocity', 'Externally Filtered Velocity', 'Location', 'southoutside')
-    title("Filtered Position and Velocity for Trial 10 (MATLAB vs. External)");
+    legend('Raw Position', 'Filtered Position', 'Filtered Velocity', 'Location', 'southoutside')
+    title(append("Filtered Eye Position/Velocity: Trial ", num2str(trialNumber)));
     %title(append('Gaze During Single Dot: Trial ' , num2str(trialNumber)));% num2str(thistrial)));
     xlabel('Time (s)');
     yyaxis left
@@ -140,15 +139,15 @@ for thistrial = 10 % 1:length(eventtimes(:,trial))
     ylabel('Velocity (deg/s)');
      
     x0=50;
-    y0=50;
+    y0=0;
     width=600*1.25;
     height=550*1.25;
     set(gcf,'position',[x0,y0,width,height])
 
-   print('C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Aly11-18-19/plots129.ps', ...
+   print('C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.ps', ...
        '-dpsc', '-append');           
-   %hold off
-   %clf    
+   hold off
+   clf    
 end % for 
 
 disp("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
@@ -162,9 +161,9 @@ disp("Total Number Trials Analyzed: " + totalAnalyzed)
 disp("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 disp("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-% ps2pdf('psfile','C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Aly11-18-19/plots129.ps', ...
-%                  'pdffile', 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Aly11-18-19/plots129.pdf', ...
-%                  'gscommand', gscommand, 'gsfontpath', gsfontpath, 'gslibpath', gslibpath);
+ps2pdf('psfile','C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.ps', ...
+                  'pdffile', 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.pdf', ...
+                  'gscommand', gscommand, 'gsfontpath', gsfontpath, 'gslibpath', gslibpath);
 
 
 end
