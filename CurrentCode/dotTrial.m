@@ -14,7 +14,7 @@ try
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 6;
+    trialsPerCondition = 3;
     pauseBetweenTrials = 1;
     isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
                                % screen following the coherent dots
@@ -23,7 +23,7 @@ try
     pauseBeforeSingleDotMotion = 0.5; % in seconds
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
-    singleDotOutput = 0;
+    singleDotOutput = 1;
     decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     dispFixationCircle = 1;
@@ -32,17 +32,17 @@ try
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
-    monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
+    monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 0;
-    pupilNetworkOn = 0;
+    screenNum = 1; % 0 for xps, 1 for lab monitor
+    pupilNetworkOn = 1;
     startTimePupil = 1;
-    runOutput = 0;
+    runOutput = 1;
     
     % Rest
-    restEveryXTrials = 5;
+    restEveryXTrials = 45;
     restDuration = 10;
-    returnDuration = 5;
+    returnDuration = 3;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
     numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
@@ -75,13 +75,14 @@ try
    
     % Initialize the screen and pupil network
     
-   
+
     screenInfo = openExperiment(monWidth,viewDist,screenNum);
     
+    restAndReturn(screenInfo, fixationCrossSize, restDuration, returnDuration) % restAndReturn(restDuration, returnDuration)
+
     if pupilNetworkOn
         [hUDP, eyeProperties] = startPupilNetwork();
     end
-    
     % Run through each trial
     for i = 1:numberOfTrials
         

@@ -1,6 +1,6 @@
 function restAndReturn(screenInfo, crossSize, restDuration, returnDuration)
     curWindow = screenInfo.curWindow;
-    maxWaitTime = 60;
+    maxWaitTime = 60000;
     
     %% Rest Message
     restMessage1 = 'Rest your eyes.';

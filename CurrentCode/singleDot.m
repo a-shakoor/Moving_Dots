@@ -94,6 +94,6 @@ singleDotOff = GetSecs;
     timestamp = strrep(timestamp,' ','_');
     timestamp = strrep(timestamp,':','-');
     filename = strcat(folderPath, '\','Trial-',num2str(trialNum),'-',timestamp, '.csv');
-    %dlmwrite(filename, singleDotPositions,'precision',14)
+    dlmwrite(filename, singleDotPositions,'precision',14)
     end
 end
