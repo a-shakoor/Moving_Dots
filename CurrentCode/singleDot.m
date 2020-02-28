@@ -1,4 +1,4 @@
-function [initialY, velocity, singleDotOn, singleDotBackToCenter, singleDotOff] = singleDot(screenInfo, trialNum, duration, dispStepRamp)
+function [initialY, velocity, singleDotOn, singleDotBackToCenter, singleDotOff] = singleDot(screenInfo, trialNum, duration, dispStepRamp, pauseBeforeMotion, singleDotOutput)
 
 %% Parameter Setting
 % duration = time to get from center to end of screen (AFTER STEPRAMP)
@@ -48,17 +48,22 @@ else
     velocity = v_pixframe;
 end
 
+%% Draw Center
+    Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
+    Screen('Flip', curWindow);
+    singleDotOn = GetSecs;
+    originalCenter = center;
+    
+%% Pause Before Motion
+    pause(pauseBeforeMotion);
+
 %% Actual drawing code
 if dispStepRamp 
     rampDistance = (v_pixsec * -1 * stepRampTimeBackToCenter);
     %rampDistance = stepRampAngle * screenInfo.ppd * sign(v_pixsec) * -1 % in pixels
     duration = duration + abs(rampDistance / v_pixsec);
     
-    %draw center
-    Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
-    Screen('Flip', curWindow);
-    singleDotOn = GetSecs;
-    originalCenter = center;
+ 
     
     %flash to step ramp
     center = [center(1) + rampDistance, center(2)];
@@ -83,11 +88,13 @@ Screen('Flip', curWindow);
 singleDotOff = GetSecs;
 
 %% Array of Event Times
-folderPath = 'C:\Users\KinArmLab\Documents\MATLAB\Aly\Moving_Dots\Results';
-timestamp = datestr(now);
-timestamp = strrep(timestamp,'/','-');
-timestamp = strrep(timestamp,' ','_');
-timestamp = strrep(timestamp,':','-');
-filename = strcat(folderPath, '\','Trial-',num2str(trialNum),'-',timestamp, '.csv');
-dlmwrite(filename, singleDotPositions,'precision',14)
+    if singleDotOutput
+    folderPath = 'C:\Users\KinArmLab\Documents\MATLAB\Aly\Moving_Dots\Results';
+    timestamp = datestr(now);
+    timestamp = strrep(timestamp,'/','-');
+    timestamp = strrep(timestamp,' ','_');
+    timestamp = strrep(timestamp,':','-');
+    filename = strcat(folderPath, '\','Trial-',num2str(trialNum),'-',timestamp, '.csv');
+    %dlmwrite(filename, singleDotPositions,'precision',14)
+    end
 end

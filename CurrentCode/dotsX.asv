@@ -90,8 +90,7 @@ flashDuration = .1; %in secs
 isSingleDotTrial = dotInfo.isSingleDotTrial;
 dispStepRamp = dotInfo.dispStepRamp;
 singleDotDuration = dotInfo.singleDotDuration;
-pauseBeforeSingleDotMotion = dotInfo.pauseBeforeSingleDotMotion;
-singleDotOutput = dotInfo.singleDotOutput;
+pauseBeforeSingleDotMotion = dotInfo.
 dotInfo.maxDotTime = dotInfo.cohDuration;
 decisionMaxTime = dotInfo.decisionMaxTime; % time to make a decision in seconds
 
@@ -373,7 +372,7 @@ timeCoherentOff = GetSecs;
 
 if isSingleDotTrial
     [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter singleDotOff] ...
-        = singleDot(screenInfo, dotInfo.trialNum, singleDotDuration, dispStepRamp, pauseBeforeSingleDotMotion, singleDotOutput);
+        = singleDot(screenInfo, dotInfo.trialNum, singleDotDuration, dispStepRamp, pauseBeforeMotion);
     KbQueueRelease();
     % Checks for code after singleDot ends
     initDecisionTimeFrames = round(decisionMaxTime * screenInfo.monRefresh);

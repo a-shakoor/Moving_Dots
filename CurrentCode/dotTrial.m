@@ -20,8 +20,10 @@ try
                                % screen following the coherent dots
     presentFeedback = 0;       % 1 or 0
     dispStepRamp = 1;          % Should a stepramp be displayed
+    pauseBeforeSingleDotMotion = 1; % in seconds
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
+    singleDotOutput = 0;
     decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     dispFixationCircle = 1;
@@ -31,14 +33,14 @@ try
     % ScreenInfo Parameters
     monWidth = 51.56; %30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
-    screenNum = 1;
-    pupilNetworkOn = 1;
+    screenNum = 0;
+    pupilNetworkOn = 0;
     startTimePupil = 1;
-    runOutput = 1;
+    runOutput = 0;
     
     % Rest
-    restEveryXTrials = 40;
-    restDuration = 20;
+    restEveryXTrials = 100;
+    restDuration = 10;
     returnDuration = 5;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
@@ -96,6 +98,8 @@ try
         dotInfo.decisionMaxTime = decisionMaxTime;
         dotInfo.presentFeedback = presentFeedback;
         dotInfo.dispStepRamp = dispStepRamp;
+        dotInfo.pauseBeforeSingleDotMotion = pauseBeforeSingleDotMotion;
+        dotInfo.singleDotOutput = singleDotOutput;
         dotInfo.dispFixationCircle = dispFixationCircle;
         dotInfo.trialNum = i;
         
