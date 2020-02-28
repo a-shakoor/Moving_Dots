@@ -12,12 +12,14 @@ stepRampAngle = 1.5; % this determines how far out to put the stepramp
 distanceFromMonitor = 75; % in cm
 singleDotBackToCenter = -1;
 stepRampTimeBackToCenter = .150;
-% Return value units
+fixationCrossSize=40;
+
+%% Return value units
 % 1 - present velocity in pixels/second
 % 0 - present velocity in pixels/frame
 presentVelocityInSeconds = 1;
 
-% y-coordinate bounds (for the jitter in y)
+%% y-coordinate bounds (for the jitter in y)
 % note: lowerBound is actually the "top" bound on the screen b/c
 % coordinates increase as you go down the screen
 putJitterInY = 0; % 0 or 1
@@ -48,14 +50,10 @@ else
     velocity = v_pixframe;
 end
 
-%% Draw Center
-    Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
-    Screen('Flip', curWindow);
-    singleDotOn = GetSecs;
+%% Draw Fixation at Center
+    fixationCross(pauseBeforeMotion, fixationCrossSize, screenInfo)
     originalCenter = center;
-    
-%% Pause Before Motion
-    pause(pauseBeforeMotion);
+
 
 %% Actual drawing code
 if dispStepRamp 
@@ -69,6 +67,7 @@ if dispStepRamp
     center = [center(1) + rampDistance, center(2)];
     Screen('DrawDots', curWindow, center, 20, [255 255 255], [0 0], 1);
     Screen('Flip', curWindow);
+    singleDotOn = GetSecs;
 
     %pause(1);
     visualAngle = abs(rampDistance)/screenInfo.ppd;

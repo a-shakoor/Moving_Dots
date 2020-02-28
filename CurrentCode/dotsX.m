@@ -372,7 +372,7 @@ timeCoherentOff = GetSecs;
 %% Section 5: Single Dot
 
 if isSingleDotTrial
-    [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter singleDotOff] ...
+    [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter, singleDotOff] ...
         = singleDot(screenInfo, dotInfo.trialNum, singleDotDuration, dispStepRamp, pauseBeforeSingleDotMotion, singleDotOutput);
     KbQueueRelease();
     % Checks for code after singleDot ends
@@ -397,7 +397,7 @@ if isSingleDotTrial
                         response = 180;
                     end
 
-                    timeResponse = GetSecs; %%% this don't work
+                    timeResponse = secs; %%% this don't work
                     %responseTime = decisionTimeFrames * (1 / screenInfo.monRefresh);
                     if(response == dir)
                         correct = 1;

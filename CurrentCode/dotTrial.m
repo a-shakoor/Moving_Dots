@@ -20,7 +20,7 @@ try
                                % screen following the coherent dots
     presentFeedback = 0;       % 1 or 0
     dispStepRamp = 1;          % Should a stepramp be displayed
-    pauseBeforeSingleDotMotion = 1; % in seconds
+    pauseBeforeSingleDotMotion = 0.5; % in seconds
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
     singleDotOutput = 0;
@@ -28,6 +28,7 @@ try
     
     dispFixationCircle = 1;
     fixationCrossSize=60;
+    fixationCrossDuration = .400;
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
@@ -39,7 +40,7 @@ try
     runOutput = 0;
     
     % Rest
-    restEveryXTrials = 100;
+    restEveryXTrials = 5;
     restDuration = 10;
     returnDuration = 5;
     
@@ -110,8 +111,7 @@ try
         if pupilNetworkOn
             startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
         end
-        calibrationCircle(.200, 30, screenInfo); % fixationCircle(duration, radius, screenInfo)
-        fixationCross(.200, fixationCrossSize, screenInfo);  % fixationCross(duration, size, screenInfo)
+        fixationCross(fixationCrossDuration, fixationCrossSize, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);
         outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil)
         outputStructs(i) = outputStruct;
