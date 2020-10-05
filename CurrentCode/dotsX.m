@@ -328,41 +328,6 @@ while continue_show
     % Check for the end of loop
     continue_show = continue_show - 1;
     
-    % This code checks for a response. Will only run if this is not a
-    % singleDot trial.
-    % User may terminate the dots by pressing certain keyboard keys defined by
-    % "keys". Pressing the space bar will cause a signal to be sent so that the 
-    % experiment will end after this trial.
-    if ~isempty(keys) && ~isSingleDotTrial
-        [keyIsDown,~,keyCode] = KbCheck;
-        if keyIsDown
-            % Send abort signal
-            %if keyCode(abort)
-            %    response(1) = find(keyCode(abort));
-            %end
-            % End trial, have response
-            if any(keyCode(keys))
-                response_index = find(keyCode(keys));
-                if(keys(response_index) == dotInfo.keyRight)
-                    response = 0;
-                elseif(keys(response_index) == dotInfo.keyLeft)
-                    response = 180;
-                end
-            
-                continue_show = 0;
-                % response_time = secs; %%% this don't work
-                response_time = frames * (1 / screenInfo.monRefresh);
-                if(response == dir)
-                    correct = 1;
-                else
-                    correct = 0;
-                end
-            end
-        end
-        KbQueueRelease();
-
-    end
-    
 end
 % Present the last frame of dots
 Screen('Flip',curWindow,0,dontclear);
@@ -389,6 +354,9 @@ if isSingleDotTrial
                 %    response(1) = find(keyCode(abort));
                 %end
                 % End trial, have response
+                if any(keyCode([KbName('ESCAPE')]))
+                    break;
+                end
                 if any(keyCode(keys))
                     response_index = find(keyCode(keys));
                     if(keys(response_index) == dotInfo.keyRight)

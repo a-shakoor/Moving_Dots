@@ -1,6 +1,5 @@
 function restAndReturn(screenInfo, crossSize, restDuration, returnDuration)
     curWindow = screenInfo.curWindow;
-    maxWaitTime = 60000;
     
     %% Rest Message
     restMessage1 = 'Rest your eyes.';
@@ -17,13 +16,12 @@ function restAndReturn(screenInfo, crossSize, restDuration, returnDuration)
     
     %% Wait for spacebar
     KbQueueRelease();
-    initDecisionTimeFrames = round(maxWaitTime * screenInfo.monRefresh);
+    initDecisionTimeFrames = round(restDuration * screenInfo.monRefresh);
     decisionTimeFrames = initDecisionTimeFrames;
     answered = 0;
     while (decisionTimeFrames > 0 || decisionTimeFrames < 0) && ~answered
         decisionTimeFrames = decisionTimeFrames - 1;
         [keyIsDown,secs,keyCode] = KbCheck;
-        disp(keyCode)
         if keyIsDown
             if any(keyCode([KbName('space')]))
                 answered = 1;

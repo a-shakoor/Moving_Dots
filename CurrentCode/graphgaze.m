@@ -1,5 +1,10 @@
 function [] = graphgaze()
 
+gazefilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Deandra/gaze_positions.csv';
+eventtimesfilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Deandra/EventTimes-28-Feb-2020_Total.csv';
+rawfile = csvread(gazefilepath, 1, 0); % Offsets to start at 2nd row (after headers)
+eventtimes = csvread(eventtimesfilepath);
+
 gscommand = 'C:/Program Files/gs/gs9.50/bin/gswin64.exe';
 gsfontpath = 'C:/Program Files/gs/gs9.50/Resource/Font';
 gslibpath = 'C:/Program Files/gs/gs9.50/lib';
@@ -26,11 +31,6 @@ gazetime_ind = 1;
 posx_norm_ind = 4;
 posy_norm_ind = 5;
 posx_gaze3d_ind = 8;
-
-gazefilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/gaze_positions.csv';
-eventtimesfilepath = 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/EventTimes-11-Feb-2020_10-18-03.csv';
-rawfile = csvread(gazefilepath, 1, 0); % Offsets to start at 2nd row (after headers)
-eventtimes = csvread(eventtimesfilepath);
 
 
 %% Filter Confidence above certain level
@@ -87,6 +87,12 @@ for thistrial = 1:length(eventtimes(:,trial))
     x_gaze3d = trialGaze(:, posx_gaze3d_ind);
     disp("x gaze length: " + length(x_gaze3d))
     x_norm = trialGaze(:, posx_norm_ind);
+    
+    if length(x_gaze3d) < sgfFramelen
+        disp("THIS TRIAL DID NOT HAVE ENOUGH DATA TO BE FILTERED")
+        continue
+    end
+    
     t = trialGaze(:, gazetime_ind) - trialGaze(1,gazetime_ind); % set first frame to t = 0;
     disp("t length: " + length(t))
 
@@ -101,6 +107,7 @@ for thistrial = 1:length(eventtimes(:,trial))
     end
     disp("x gaze ang length: " + length(x_gaze3d_ang))
 
+    
     %% Position
     hold on
     plot(t, x_gaze3d_ang, '-o','MarkerIndices',1:length(x_gaze3d_ang));
@@ -144,7 +151,7 @@ for thistrial = 1:length(eventtimes(:,trial))
     height=550*1.25;
     set(gcf,'position',[x0,y0,width,height])
 
-   print('C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.ps', ...
+   print('C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Deandra/plots129.ps', ...
        '-dpsc', '-append');           
    hold off
    clf    
@@ -161,8 +168,8 @@ disp("Total Number Trials Analyzed: " + totalAnalyzed)
 disp("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 disp("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-ps2pdf('psfile','C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.ps', ...
-                  'pdffile', 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Sean/plots129.pdf', ...
+ps2pdf('psfile','C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Deandra/plots129.ps', ...
+                  'pdffile', 'C:/Users/ashaq/Documents/GitHub/Moving_Dots/Results/Deandra/plots129.pdf', ...
                   'gscommand', gscommand, 'gsfontpath', gsfontpath, 'gslibpath', gslibpath);
 
 

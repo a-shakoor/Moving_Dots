@@ -14,7 +14,7 @@ try
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 3;
+    trialsPerCondition = 8;
     pauseBetweenTrials = 1;
     isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
                                % screen following the coherent dots
@@ -23,39 +23,47 @@ try
     pauseBeforeSingleDotMotion = 0.5; % in seconds
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
-    singleDotOutput = 1;
+    singleDotOutput = 0;
     decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     dispFixationCircle = 1;
-    fixationCrossSize=60;
+    fixationCrossSize = 60;
     fixationCrossDuration = .400;
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
-    monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
-    viewDist = 75;
-    screenNum = 1; % 0 for xps, 1 for lab monitor
-    pupilNetworkOn = 1;
+    monWidth = 30.4; % 30.4 for xps, 51.56 for lab monitor in cm
+    viewDist = 46; % in cm
+    screenNum = 0; % 0 for xps, 1 for lab monitor
+    pupilNetworkOn = 0;
     startTimePupil = 1;
     runOutput = 1;
     
+    folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
+    
     % Rest
     restEveryXTrials = 45;
-    restDuration = 10;
+    restDuration = 6000;
     returnDuration = 3;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
+    trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet)
     numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
-    rowIndices = 1:numberOfTrials;
-    shuffledRowIndices = rowIndices(randperm(length(rowIndices)));
-    rowCounter = 1;
+    %rowIndices = 1:trialsPerBlock
+    %shuffledRowIndices = rowIndices(randperm(length(rowIndices)))
+    %rowCounter = 1;
     for h = 1:trialsPerCondition
+        rowIndices = 1:trialsPerBlock
+        shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + (trialsPerBlock*(h-1))
+        rowCounter = 1;
         for i = 1:length(cohSet)
             for j = 1: length(dirSet)
                 for k = 1:length(apVelSet)
                     for l = 1:length(cohDurationSet)
                         %% dotInfo parameters: (coh as a decimal, dir, apvel,singleDot)
                         thisIndex = shuffledRowIndices(rowCounter);
+                        disp("setting for row: " + thisIndex + " coh%: " + cohSet(i) + " coht: " + cohDurationSet(l))sca
+                        
                         dotInfos(thisIndex).coh = cohSet(i);
                         %dotInfos(thisIndex).dir = dirSet(j);
                         dotInfos(thisIndex).dir = (randi(2)-1) * 180; %random 0 or 180                        
@@ -77,6 +85,7 @@ try
     
 
     screenInfo = openExperiment(monWidth,viewDist,screenNum);
+    screenInfo.folderPath = folderPath;
     
     restAndReturn(screenInfo, fixationCrossSize, restDuration, returnDuration) % restAndReturn(restDuration, returnDuration)
 
@@ -85,6 +94,11 @@ try
     end
     % Run through each trial
     for i = 1:numberOfTrials
+        
+        if checkForEsc() == 1
+            disp(strcat("User escaped loop during trial ", num2str(i-1)))
+            break;
+        end 
         
         if mod(i, restEveryXTrials) == 0
             restAndReturn(screenInfo, fixationCrossSize, restDuration, returnDuration) % restAndReturn(restDuration, returnDuration)
@@ -121,7 +135,7 @@ try
     
     %% Output Formatting/Writing to CSV
     if runOutput
-        output(outputStructs);
+        output(outputStructs, folderPath);
     end
     
     %% Clear the screen and exit
