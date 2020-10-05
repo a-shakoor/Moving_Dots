@@ -32,9 +32,9 @@ try
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
-    monWidth = 30.4; % 30.4 for xps, 51.56 for lab monitor in cm
-    viewDist = 46; % in cm
-    screenNum = 0; % 0 for xps, 1 for lab monitor
+    monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
+    viewDist = 75;
+    screenNum = 1; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
     startTimePupil = 1;
     runOutput = 1;
