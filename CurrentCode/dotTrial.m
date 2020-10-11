@@ -14,10 +14,11 @@ try
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 8;
+    trialsPerCondition = 2;
     pauseBetweenTrials = 1;
-    isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
+    isSingleDotTrial = 2;      % if == 1, a single dot will traverse the 
                                % screen following the coherent dots
+                               % if == 2, saccade instead of single dot
     presentFeedback = 0;       % 1 or 0
     dispStepRamp = 1;          % Should a stepramp be displayed
     pauseBeforeSingleDotMotion = 0.5; % in seconds
@@ -32,9 +33,9 @@ try
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
-    monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
-    viewDist = 75;
-    screenNum = 1; % 0 for xps, 1 for lab monitor
+    monWidth = 54; % 30.4 for xps, 51.56 for lab monitor in cm, 54 for benq
+    viewDist = 60; % in cm
+    screenNum = 0; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
     startTimePupil = 1;
     runOutput = 1;
@@ -42,7 +43,7 @@ try
     folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
     
     % Rest
-    restEveryXTrials = 45;
+    restEveryXTrials = 2000;
     restDuration = 6000;
     returnDuration = 3;
     
@@ -62,7 +63,7 @@ try
                     for l = 1:length(cohDurationSet)
                         %% dotInfo parameters: (coh as a decimal, dir, apvel,singleDot)
                         thisIndex = shuffledRowIndices(rowCounter);
-                        disp("setting for row: " + thisIndex + " coh%: " + cohSet(i) + " coht: " + cohDurationSet(l))sca
+                        disp("setting for row: " + thisIndex + " coh%: " + cohSet(i) + " coht: " + cohDurationSet(l))
                         
                         dotInfos(thisIndex).coh = cohSet(i);
                         %dotInfos(thisIndex).dir = dirSet(j);

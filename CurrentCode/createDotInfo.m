@@ -47,7 +47,7 @@ dotInfo.apVelSet = [-10 0 10];
 
 %% Dot Field and Size
 dotInfo.numDotField = 1;
-dotInfo.apXYD = [0 0 200];
+dotInfo.apXYD = [0 0 200]; %% in degress * 10
 
 
 %% If not supplied, pick each parameter from random set

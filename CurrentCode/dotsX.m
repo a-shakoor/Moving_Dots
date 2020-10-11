@@ -334,9 +334,9 @@ Screen('Flip',curWindow,0,dontclear);
 Screen('Flip', curWindow);
 timeCoherentOff = GetSecs;
 
-%% Section 5: Single Dot
+%% Section 5: Single Dot or Saccade
 
-if isSingleDotTrial
+if isSingleDotTrial == 1
     [singleDotInitialY, singleDotVelocity, singleDotOn, singleDotBackToCenter, singleDotOff] ...
         = singleDot(screenInfo, dotInfo.trialNum, singleDotDuration, dispStepRamp, pauseBeforeSingleDotMotion, singleDotOutput);
     KbQueueRelease();
@@ -383,7 +383,51 @@ if isSingleDotTrial
 
 end %if
 
+if isSingleDotTrial == 2 % saccade
+    saccadeDot(screenInfo, 20, .6, 1);
+    KbQueueRelease();
+    % Checks for code after singleDot ends
+    initDecisionTimeFrames = round(decisionMaxTime * screenInfo.monRefresh);
+    decisionTimeFrames = initDecisionTimeFrames;
+    answered = 0;
+    while (decisionTimeFrames > 0 || decisionTimeFrames < 0) && ~answered
+        decisionTimeFrames = decisionTimeFrames - 1;
+        if ~isempty(keys)
+            [keyIsDown,secs,keyCode] = KbCheck;
+            if keyIsDown
+                % Send abort signal
+                %if keyCode(abort)
+                %    response(1) = find(keyCode(abort));
+                %end
+                % End trial, have response
+                if any(keyCode([KbName('ESCAPE')]))
+                    break;
+                end
+                if any(keyCode(keys))
+                    response_index = find(keyCode(keys));
+                    if(keys(response_index) == dotInfo.keyRight)
+                        response = 0;
+                    elseif(keys(response_index) == dotInfo.keyLeft)
+                        response = 180;
+                    end
 
+                    timeResponse = secs; %%% this don't work
+                    %responseTime = decisionTimeFrames * (1 / screenInfo.monRefresh);
+                    if(response == dir)
+                        correct = 1;
+                    else
+                        correct = 0;
+                    end
+                    answered = 1;
+                end
+             end
+        KbQueueRelease();
+        end
+        Screen('WaitBlanking', screenInfo.curWindow);
+    end %while
+    
+
+end %if
 
 %% Section 6: End of Trial. Feedback and Output.
 if dotInfo.presentFeedback
@@ -398,22 +442,24 @@ outputStruct.trialNum = dotInfo.trialNum;
 outputStruct.cohDuration = dotInfo.cohDuration;
 outputStruct.coh = coh;
 outputStruct.dir = dir;
-outputStruct.singleDotVelocity = singleDotVelocity;
-outputStruct.cohSingleDotCongruent = (dir == 0 && singleDotVelocity > 0) || (dir == 180 && singleDotVelocity < 0);
 outputStruct.apVel = apVel;
 outputStruct.response = response;
 outputStruct.correct = correct;
-outputStruct.singleDotInitialY = singleDotInitialY;
 outputStruct.decisionMaxTime = decisionMaxTime;
 outputStruct.originalTimeCoherentOn = timeCoherentOn;
 outputStruct.timeCoherentOn = timeCoherentOn - timeCoherentOn;
 outputStruct.timeCoherentOff = timeCoherentOff - timeCoherentOn;
-outputStruct.timeSingleDotOn = singleDotOn - timeCoherentOn;
-outputStruct.timeSingleDotBackToCenter = singleDotBackToCenter - timeCoherentOn;
-outputStruct.timeSingleDotOff = singleDotOff - timeCoherentOn;
-outputStruct.timeResponse = timeResponse - timeCoherentOn;
-outputStruct.startTimeSystem = startTimeSystem;
-outputStruct.startTimePupil = startTimePupil;
+if isSingleDotTrial == 1
+    outputStruct.singleDotInitialY = singleDotInitialY;
+    outputStruct.singleDotVelocity = singleDotVelocity;
+    outputStruct.cohSingleDotCongruent = (dir == 0 && singleDotVelocity > 0) || (dir == 180 && singleDotVelocity < 0);
+    outputStruct.timeSingleDotOn = singleDotOn - timeCoherentOn;
+    outputStruct.timeSingleDotBackToCenter = singleDotBackToCenter - timeCoherentOn;
+    outputStruct.timeSingleDotOff = singleDotOff - timeCoherentOn;
+    outputStruct.timeResponse = timeResponse - timeCoherentOn;
+    outputStruct.startTimeSystem = startTimeSystem;
+    outputStruct.startTimePupil = startTimePupil;
+end
 
 
 Priority(0);
