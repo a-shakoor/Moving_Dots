@@ -1,6 +1,10 @@
 function restAndReturn(screenInfo, crossSize, restDuration, returnDuration)
     curWindow = screenInfo.curWindow;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    maxWaitTime = restDuration;
+>>>>>>> Stashed changes
 =======
     maxWaitTime = restDuration;
 >>>>>>> Stashed changes

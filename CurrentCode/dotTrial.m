@@ -15,7 +15,11 @@ try
     cohDurationSet = [.100, .200, .400];
                                
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     trialsPerCondition = 2;
+=======
+    trialBlocks = 2;
+>>>>>>> Stashed changes
 =======
     trialBlocks = 2;
 >>>>>>> Stashed changes
@@ -43,6 +47,9 @@ try
 =======
     monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     screenNum = 0; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
@@ -58,6 +65,7 @@ try
     
    %% Create dotInfo for each trial and store in dotInfos matrix
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet)
     numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
     %rowIndices = 1:trialsPerBlock
@@ -67,12 +75,17 @@ try
         rowIndices = 1:trialsPerBlock
         shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + (trialsPerBlock*(h-1))
 =======
+=======
+>>>>>>> Stashed changes
     trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet);
     
     for h = 1:trialBlocks
         rowIndices = 1:trialsPerBlock; 
         shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + trialsPerBlock*(trialBlocks-1);
         disp(shuffledRowIndices)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         rowCounter = 1;
         for i = 1:length(cohSet)
@@ -113,11 +126,14 @@ try
     end
     % Run through each trial
     for i = 1:length(dotInfos)
+<<<<<<< Updated upstream
         
         if checkForEsc() == 1
             disp(strcat("User escaped loop during trial ", num2str(i-1)))
             break;
         end 
+=======
+>>>>>>> Stashed changes
         
         if mod(i, restEveryXTrials) == 0
             restAndReturn(screenInfo, fixationCrossSize, restDuration, returnDuration) % restAndReturn(restDuration, returnDuration)
