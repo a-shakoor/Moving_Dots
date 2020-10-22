@@ -43,11 +43,14 @@ try
 =======
     monWidth = 51.56; % 30.4 for xps, 51.56 for lab monitor
     viewDist = 75;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     screenNum = 0; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
     startTimePupil = 1;
-    runOutput = 1;
+    runOutput = 1; %%% MAKE SURE THIS IS ON IF YOU NEED DATAq
     
     folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
     

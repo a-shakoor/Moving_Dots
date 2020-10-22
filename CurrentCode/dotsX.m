@@ -165,6 +165,9 @@ dotSize = dotInfo.dotSize; % probably better to leave this in pixels, but not su
 % a field in dotInfo.
 ndots = min(dotInfo.maxDotsPerFrame, ...
     ceil(16.7 * apD .* apD * 0.01 / screenInfo.monRefresh));
+disp("#dots was going to be: " + ndots + " dots")
+ndots = 300;
+disp("now it's: " + 300 + " dots")
 
 
 %% Section 3: Create matrix of dot locations for entire trial

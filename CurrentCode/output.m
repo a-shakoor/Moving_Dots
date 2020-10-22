@@ -37,6 +37,7 @@ function output(outputStructs, folderPath)
         eventTimes(i,9) = outputStruct.timeResponse;
     end
     dlmwrite(filename, eventTimes,'precision',9)
+    dlmwrite(strcat('backupfor','EventTimes-',timestamp, '.csv'))
 
     %% Array of Trial Info
     % [Trail #, Coherence, Direction of Dots, Aperature Velocity, 
@@ -62,7 +63,8 @@ function output(outputStructs, folderPath)
         trialInfos(i,10) = outputStruct.singleDotVelocity;
         trialInfos(i,11) = outputStruct.decisionMaxTime;
     end
-    dlmwrite(filename, trialInfos,'precision',9)    
+    dlmwrite(filename, trialInfos,'precision',9)
+    dlmwrite(strcat('backupfor','TrialInfo-',timestamp, '.csv'))
     
 
 
