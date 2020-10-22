@@ -316,11 +316,10 @@ while continue_show
         
         %black out around the fixation
         blackoutRadius = 3 * screenInfo.ppd;
-        Screen('FillOval', curWindow, [0 0 0], ...
-            [center(df,1)-blackoutRadius, center(df,2)-blackoutRadius, ...
-            center(df,1)+ blackoutRadius, center(df,2)+blackoutRadius]);        
+        Screen('FillOval', curWindow, [0 100 255], ...
+        [center(1)-blackoutRadius, center(2)-radius, center(1)+radius, center(2)+radius]);        
         
-        % red fixation
+    % red fixation
         if(dotInfo.dispFixationCircle == 1)
             Screen('DrawDots', curWindow, [0 0], dotSize * 3, [255 0 0], center(df, 1:2));
         end

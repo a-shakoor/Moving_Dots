@@ -55,6 +55,8 @@ Screen('FillOval', curWindow, [255 255 255], ...
 Screen('Flip', curWindow);
 Screen('WaitBlanking', curWindow, numFrames) % stay on
 Screen(curWindow,'FillRect', [0 0 0])
+Screen('FillOval', curWindow, [0 100 255], ...
+    [center(1)-radius, center(2)-radius, center(1)+radius, center(2)+radius]);
 Screen('Flip', curWindow);
 singleDotOff = GetSecs;
 

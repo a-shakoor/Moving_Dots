@@ -1,9 +1,7 @@
 function restAndReturn(screenInfo, crossSize, restDuration, returnDuration)
     curWindow = screenInfo.curWindow;
-<<<<<<< Updated upstream
-=======
+
     maxWaitTime = restDuration;
->>>>>>> Stashed changes
     
     %% Rest Message
     restMessage1 = 'Rest your eyes.';
