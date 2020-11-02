@@ -9,15 +9,18 @@ try
     % Put all possible parameters in the following 3 sets
     %cohSet = [.1, .2, .4];
     cohSet = [.03, .06, .12, .24, .48];    % dot coherence on interval [0,1]
-    dirSet = -1;              % possible direction of coherently moving dots
+    dirSet = [180 0];              % possible direction of coherently moving dots
                                    % 0 or 180. 0 is right, 180 is left
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
-    trialsPerCondition = 8;
+
+    trialBlocks = 2;
+
     pauseBetweenTrials = 1;
-    isSingleDotTrial = 1;      % when set to 1, a single dot will traverse the 
+    isSingleDotTrial = 2;      % if == 1, a single dot will traverse the 
                                % screen following the coherent dots
+                               % if == 2, saccade instead of single dot
     presentFeedback = 0;       % 1 or 0
     dispStepRamp = 1;          % Should a stepramp be displayed
     pauseBeforeSingleDotMotion = 0.5; % in seconds
@@ -32,33 +35,36 @@ try
     pauseAfterFixation = .200;
     
     % ScreenInfo Parameters
-    monWidth = 30.4; % 30.4 for xps, 51.56 for lab monitor in cm
-    viewDist = 46; % in cm
+    monWidth = 54; % 30.4 for xps, 51.56 for lab monitor in cm, 54 for benq
+    viewDist = 60; % in cm
     screenNum = 0; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
     startTimePupil = 1;
-    runOutput = 1;
+    runOutput = 1; %%% MAKE SURE THIS IS ON IF YOU NEED DATAq
     
     folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
     
     % Rest
-    restEveryXTrials = 45;
+    restEveryXTrials = 2000;
     restDuration = 6000;
     returnDuration = 3;
     
    %% Create dotInfo for each trial and store in dotInfos matrix
-    trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet)
-    numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
-    rowIndices = 1:trialsPerBlock
-    shuffledRowIndices = rowIndices(randperm(length(rowIndices)))
-    rowCounter = 1;
-    for h = 1:trialsPerCondition
+    trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet);
+    
+    for h = 1:trialBlocks
+        rowIndices = 1:trialsPerBlock; 
+        shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + trialsPerBlock*(trialBlocks-1)
+        disp(shuffledRowIndices)
+        rowCounter = 1;
         for i = 1:length(cohSet)
             for j = 1: length(dirSet)
                 for k = 1:length(apVelSet)
                     for l = 1:length(cohDurationSet)
                         %% dotInfo parameters: (coh as a decimal, dir, apvel,singleDot)
                         thisIndex = shuffledRowIndices(rowCounter);
+                        disp("setting for row: " + thisIndex + " coh%: " + cohSet(i) + " coht: " + cohDurationSet(l))
+                        
                         dotInfos(thisIndex).coh = cohSet(i);
                         %dotInfos(thisIndex).dir = dirSet(j);
                         dotInfos(thisIndex).dir = (randi(2)-1) * 180; %random 0 or 180                        
@@ -88,7 +94,7 @@ try
         [hUDP, eyeProperties] = startPupilNetwork();
     end
     % Run through each trial
-    for i = 1:numberOfTrials
+    for i = 1:length(dotInfos)
         
         if checkForEsc() == 1
             disp(strcat("User escaped loop during trial ", num2str(i-1)))
@@ -102,7 +108,7 @@ try
         
         %pre-Step 1: Construct a rawDotInfo struct and open pupil network
         rawDotInfo.screenInfo = screenInfo;       
-        
+         
         %Step 1 of 2:   Create dotInfo struct by passing rawDotInfo to
         %               createDotInfo
         dotInfo = createDotInfo(rawDotInfo);
@@ -116,14 +122,14 @@ try
         
         %Step 2 of 2: Pass in dotinfo struct to dotsX to run trial
         % THIS STARTS THE ACTUAL TRIAL
-        startTimeSystem = GetSecs
+        startTimeSystem = GetSecs;
         startTimePupil = -1;
         if pupilNetworkOn
-            startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties)
+            startTimePupil = pupilGetCurrentTime(hUDP, eyeProperties);
         end
         fixationCross(fixationCrossDuration, fixationCrossSize, screenInfo);  % fixationCross(duration, size, screenInfo)
         pause(pauseAfterFixation);
-        outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil)
+        outputStruct = dotsX(screenInfo, dotInfo, startTimeSystem, startTimePupil);
         outputStructs(i) = outputStruct;
         pause(pauseBetweenTrials);
     end
@@ -147,4 +153,4 @@ success = true;
 end
 end
 
-
+ 

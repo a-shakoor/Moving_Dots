@@ -36,11 +36,9 @@ function output(outputStructs, folderPath)
         eventTimes(i,8) = outputStruct.timeSingleDotOff;
         eventTimes(i,9) = outputStruct.timeResponse;
     end
-    try
-        dlmwrite(filename, eventTimes,'precision',9)
-    catch
-        dlmwrite(strcat('backupfor','EventTimes-',timestamp, '.csv'), eventTimes,'precision',9)
-    end
+    dlmwrite(filename, eventTimes,'precision',9)
+    dlmwrite(strcat('backupfor','EventTimes-',timestamp, '.csv'), eventTimes,'precision',9)
+
     %% Array of Trial Info
     % [Trail #, Coherence, Direction of Dots, Aperature Velocity, 
     %  User Response, Correct or Not, Single Dot's Initial Y, 
@@ -57,19 +55,18 @@ function output(outputStructs, folderPath)
         trialInfos(i,2) = outputStruct.cohDuration;
         trialInfos(i,3) = outputStruct.coh;
         trialInfos(i,4) = outputStruct.dir;
-        trialInfos(i,5) = outputStruct.response;
-        trialInfos(i,6) = outputStruct.correct;
-        trialInfos(i,7) = outputStruct.singleDotVelocity;
-        trialInfos(i,8) = outputStruct.cohSingleDotCongruent;
+                trialInfos(i,7) = outputStruct.response;
+        trialInfos(i,8) = outputStruct.correct;
+        trialInfos(i,5) = outputStruct.singleDotVelocity;
+        trialInfos(i,6) = outputStruct.cohSingleDotCongruent;
+
         trialInfos(i,9) = outputStruct.singleDotInitialY;
         trialInfos(i,10) = outputStruct.singleDotVelocity;
         trialInfos(i,11) = outputStruct.decisionMaxTime;
     end
-    try
-        dlmwrite(filename, trialInfos,'precision',9)
-    catch
-        dlmwrite(strcat('backupfor','TrialInfo-',timestamp, '.csv'), trialInfos,'precision',9)
-    end
+    dlmwrite(filename, trialInfos,'precision',9)
+    dlmwrite(strcat('backupfor','TrialInfo-',timestamp, '.csv'), trialInfos,'precision',9)
+    
 
 
 end

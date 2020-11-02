@@ -79,6 +79,9 @@ dotInfo.speed = 100;
 %dotInfo.speed = 10 * 10 * 59.9353 / 51.1236; % a little above 100
 %dotInfo.speed = 300;
 
+%units are in 10th degree/second
+dotInfo.speed = 50;
+
 
 % old: dotInfo.maxDotTime = 4; %%%%%%%standardize this
 % dotInfo.maxDotTime = (distance from center to edge) / (velocity of aperature) in seconds
@@ -155,7 +158,7 @@ dotInfo.imean = [];
 
 % make time distributions - only has affect if variable distribution
 
-dotInfo.maxDotsPerFrame = 150;   % by trial and error.  Depends on graphics card
+dotInfo.maxDotsPerFrame = 300;   % by trial and error.  Depends on graphics card
 % Use test_dots7_noRex to find out when we miss frames.
 % The dots routine tries to maintain a constant dot density, regardless of
 % aperture size.  However, it respects MaxDotsPerFrame as an upper bound.

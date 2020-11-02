@@ -8,9 +8,9 @@ try
     
     % Put all possible parameters in the following 3 sets
     %cohSet = [.1, .2, .4];
-    cohSet = [.03, .06, .12, .24, .48];    % dot coherence on interval [0,1]
-    dirSet = [180 0];              % possible direction of coherently moving dots
-                                   % 0 or 180. 0 is right, 180 is left
+    cohSet = [.03, .06] %%, .12, .24, .48];    % dot coherence on interval [0,1]
+    dirSet = [-1];              % possible direction of coherently moving dots
+                                   % 0 or 180. 0 is right, 180 is left. -1 is random 
     apVelSet = [0];            % velocity of aperature. 0 for static aperature.
     cohDurationSet = [.100, .200, .400];
                                
@@ -19,7 +19,7 @@ try
     trialBlocks = 2;
 
     pauseBetweenTrials = 1;
-    isSingleDotTrial = 2;      % if == 1, a single dot will traverse the 
+    isSingleDotTrial = 1;      % if == 1, a single dot will traverse the 
                                % screen following the coherent dots
                                % if == 2, saccade instead of single dot
     presentFeedback = 0;       % 1 or 0
@@ -28,7 +28,7 @@ try
     singleDotDuration = 0.5;   % time for single dot to traverse screen (secs)
                                % This is irrelevant if not a single dot trial.
     singleDotOutput = 0;
-    decisionMaxTime = 3;     % Maximum time allowed to make a decision. -1 if unlimited time
+    decisionMaxTime = 100;     % Maximum time allowed to make a decision. -1 if unlimited time
     
     dispFixationCircle = 1;
     fixationCrossSize = 60;
@@ -42,7 +42,7 @@ try
     screenNum = 0; % 0 for xps, 1 for lab monitor
     pupilNetworkOn = 0;
     startTimePupil = 1;
-    runOutput = 1;
+    runOutput = 1; %%% MAKE SURE THIS IS ON IF YOU NEED DATAq
     
     folderPath = 'C:\Users\ashaq\Documents\GitHub\Moving_Dots\Results';
     
@@ -53,16 +53,9 @@ try
     
    %% Create dotInfo for each trial and store in dotInfos matrix
 
-    trialsPerBlock = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet);
-    numberOfTrials = length(cohSet) * length(dirSet) * length(apVelSet) * length(cohDurationSet) * trialsPerCondition;
-    %rowIndices = 1:trialsPerBlock
-    %shuffledRowIndices = rowIndices(randperm(length(rowIndices)))
-    %rowCounter = 1;
-    
     for h = 1:trialBlocks
-        rowIndices = 1:trialsPerBlock; 
-        shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + trialsPerBlock*(trialBlocks-1);
-        disp(shuffledRowIndices)
+        rowIndices = 1:trialsPerBlock;
+        shuffledRowIndices = rowIndices(randperm(length(rowIndices))) + trialsPerBlock*(h-1)
         rowCounter = 1;
         for i = 1:length(cohSet)
             for j = 1: length(dirSet)
@@ -70,9 +63,8 @@ try
                     for l = 1:length(cohDurationSet)
                         %% dotInfo parameters: (coh as a decimal, dir, apvel,singleDot)
                         thisIndex = shuffledRowIndices(rowCounter);
-                        disp("setting for row: " + thisIndex + " coh%: " + cohSet(i) + " coht: " + cohDurationSet(l))
-                        
                         dotInfos(thisIndex).coh = cohSet(i);
+                        disp(thisIndex + " " + dotInfos(thisIndex).coh)
                         %dotInfos(thisIndex).dir = dirSet(j);
                         dotInfos(thisIndex).dir = (randi(2)-1) * 180; %random 0 or 180                        
                         dotInfos(thisIndex).apVel = apVelSet(k);
@@ -85,6 +77,7 @@ try
             end
         end
     end    
+    
     
     %% Loop through shuffledDotInfos matrix to run each trial 
     % Output saved in trialInfo
@@ -148,7 +141,7 @@ try
     
     %% Clear the screen and exit
     if pupilNetworkOn
-        closePupilNet work(hUDP);
+        closePupilNetwork(hUDP);
     end
     closeExperiment;
     
